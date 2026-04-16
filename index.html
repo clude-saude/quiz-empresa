@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clude Saúde - Quiz Oficial</title>
+    <title>Clude Saúde - Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden { display: none; }
-        /* Identidade Visual Clude: #8031a7 */
         .bg-clude { background-color: #8031a7; }
         .text-clude { color: #8031a7; }
         .border-clude { border-color: #8031a7; }
-        
         .selected-purple { 
             border-color: #8031a7 !important; 
             background-color: #f3ebf6 !important; 
             color: #8031a7 !important;
             box-shadow: 0 0 0 2px #8031a7;
         }
-        
         .correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
         .wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
-        
-        input:focus { border-color: #8031a7 !important; ring: 2px #8031a7; }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
@@ -30,48 +25,45 @@
     <div id="main-card" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-lg border-t-[10px] border-clude">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black text-clude tracking-tighter">Clude Saúde</h1>
-            <div class="h-1 w-12 bg-purple-200 mx-auto mt-2 rounded-full"></div>
         </div>
 
         <div id="step-registration">
-            <h2 class="text-xl font-bold text-gray-800 mb-2 text-center">Participe e concorra!</h2>
-            <p class="text-gray-500 mb-8 text-center text-sm">Preencha os dados abaixo para iniciar o quiz.</p>
+            <h2 class="text-xl font-bold text-gray-800 mb-2 text-center">Participe do Sorteio!</h2>
+            <p class="text-gray-500 mb-8 text-center text-sm">Responda o quiz e descubra seu perfil.</p>
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">Nome Completo</label>
-                    <input type="text" id="nome" placeholder="Seu nome" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none transition-all">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Nome Completo</label>
+                    <input type="text" id="nome" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-clude transition-all">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">WhatsApp</label>
-                    <input type="tel" id="telefone" placeholder="(00) 00000-0000" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none transition-all">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">WhatsApp</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-clude transition-all">
                 </div>
 
                 <input type="text" id="email_confirm" style="display:none !important" tabindex="-1" autocomplete="off">
                 
-                <p class="font-bold text-gray-700 mt-6 text-center text-sm">Selecione uma área para o quiz:</p>
-                <div class="grid grid-cols-3 gap-3">
-                    <button type="button" onclick="selectArea(this, 'Saúde')" class="area-btn border-2 border-gray-100 p-4 rounded-2xl text-xs font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Saúde</button>
-                    <button type="button" onclick="selectArea(this, 'Corpo')" class="area-btn border-2 border-gray-100 p-4 rounded-2xl text-xs font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Corpo</button>
-                    <button type="button" onclick="selectArea(this, 'Mente')" class="area-btn border-2 border-gray-100 p-4 rounded-2xl text-xs font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Mente</button>
+                <p class="font-bold text-gray-700 mt-6 text-center text-xs uppercase">Escolha um tema:</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button type="button" onclick="selectArea(this, 'Saúde')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">SAÚDE</button>
+                    <button type="button" onclick="selectArea(this, 'Corpo')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">CORPO</button>
+                    <button type="button" onclick="selectArea(this, 'Mente')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">MENTE</button>
                 </div>
 
-                <button onclick="startQuiz()" class="w-full bg-clude text-white py-5 rounded-2xl font-black mt-8 shadow-xl shadow-purple-200 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest">Iniciar Quiz</button>
+                <button type="button" onclick="startQuiz()" class="w-full bg-clude text-white py-5 rounded-2xl font-black mt-8 shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest">Iniciar Quiz</button>
             </div>
         </div>
 
         <div id="step-quiz" class="hidden">
             <div id="question-box">
                 <div class="flex justify-between items-center mb-6">
-                    <span id="question-number" class="text-[10px] font-black text-clude uppercase tracking-tighter bg-purple-100 px-3 py-1 rounded-full">Pergunta 1 de 5</span>
-                    <span id="current-score" class="text-[10px] font-bold text-gray-300 uppercase">Pontos: 0</span>
+                    <span id="question-number" class="text-[10px] font-black text-clude uppercase bg-purple-100 px-3 py-1 rounded-full">Pergunta 1 de 5</span>
+                    <span id="current-score" class="text-[10px] font-bold text-gray-300">PONTOS: 0</span>
                 </div>
-                <h2 id="question-text" class="text-xl font-bold text-gray-800 mb-8 leading-tight">...</h2>
+                <h2 id="question-text" class="text-lg font-bold text-gray-800 mb-8 leading-tight">...</h2>
                 <div id="options-container" class="space-y-3"></div>
-                
-                <div id="feedback" class="mt-8 p-5 rounded-2xl hidden text-sm font-medium leading-relaxed border-l-8"></div>
-                
-                <button id="next-btn" onclick="nextQuestion()" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-black mt-8 hidden shadow-lg uppercase tracking-widest transition-all">Próxima Pergunta</button>
+                <div id="feedback" class="mt-8 p-5 rounded-2xl hidden text-sm font-medium leading-relaxed border-l-8 border-clude bg-purple-50 text-clude"></div>
+                <button id="next-btn" type="button" onclick="nextQuestion()" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-black mt-8 hidden shadow-lg uppercase tracking-widest transition-all">Próxima Pergunta</button>
             </div>
         </div>
 
@@ -79,15 +71,15 @@
             <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 text-clude">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
-            <h2 class="text-2xl font-black text-gray-800 mb-4">Quiz Concluído!</h2>
+            <h2 class="text-2xl font-black text-gray-800 mb-4">Concluído!</h2>
             <div id="result-message" class="text-gray-600 bg-gray-50 p-6 rounded-3xl text-left text-sm leading-relaxed mb-8 italic border-l-4 border-clude shadow-inner"></div>
-            <p class="text-clude font-black mb-8 uppercase tracking-tighter text-sm">✅ Participação confirmada no sorteio!</p>
-            <button onclick="location.reload()" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-clude transition-all">Refazer teste</button>
+            <p class="text-clude font-black mb-8 uppercase text-sm">✅ Participação confirmada no sorteio!</p>
+            <button type="button" onclick="location.reload()" class="text-[10px] font-black text-gray-400 uppercase hover:text-clude transition-all">Refazer Quiz</button>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURAÇÕES DO USUÁRIO (Obrigatório preencher) ---
+        // CONFIGURAÇÕES (PREENCHA AQUI)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyy6aD0FNA4VlT-ETUAz0-ctnUScJI9zIhrqbihqNcOvM5UGSrran8YdWxoYlTkm4YNgg/exec'; 
         const AUTH_TOKEN = 'Clude2026!Quiz#Alpha'; 
 
@@ -97,36 +89,154 @@
         const quizData = {
             "Saúde": {
                 questions: [
-                    { q: "Quando falamos em saúde, você pensa em...", options: ["Só me preocupo quando algum sintoma aparece", "Tento manter o equilíbrio, mas preciso melhorar", "Encaro com prioridade para prevenir doenças"], weights: [1, 2, 3], explanation: "Cuidar da saúde preventivamente é o diferencial para uma vida longa!" },
-                    { q: "Como você cuida da sua saúde mental?", options: ["Não cuido muito", "Tento controlar o estresse com pausas", "Dou atenção emocional e busco ajuda profissional"], weights: [1, 2, 3], explanation: "Saúde mental e física caminham juntas!" },
-                    { q: "Você costuma procurar informações confiáveis quando sente algo?", options: ["Jogo no Google e vou no primeiro", "Tento achar fontes confiáveis... mas tenho dúvida", "Procuro orientação de profissionais ou plataformas seguras"], weights: [1, 2, 3], explanation: "A Clude Saúde oferece canais seguros para tirar suas dúvidas." },
-                    { q: "No dia a dia, seu cuidado com a saúde é...", options: ["Geralmente deixo pra depois", "Tento cuidar, mas sem constância", "Parte da minha rotina diária"], weights: [1, 2, 3], explanation: "A constância é o segredo da prevenção." },
-                    { q: "O que mais atrapalha o cuidado com a saúde hoje?", options: ["Falta de tempo e correria", "Dificuldade para marcar ou lembrar consultas", "Consigo me organizar usando recursos que facilitam"], weights: [1, 2, 3], explanation: "Nossos recursos digitais foram feitos para facilitar sua rotina!" }
+                    { q: "Quando falamos em saúde, você pensa em...", options: ["Só me preocupo quando algum sintoma aparece", "Tento manter o equilíbrio, mas preciso melhorar", "Encaro com prioridade para prevenir doenças"], weights: [1, 2, 3], explanation: "A prevenção é o melhor caminho!" },
+                    { q: "Como você cuida da sua saúde mental?", options: ["Não cuido muito", "Tento controlar o estresse com pausas", "Dou atenção emocional e busco ajuda profissional"], weights: [1, 2, 3], explanation: "Mente sã, corpo são!" },
+                    { q: "Você costuma procurar informações confiáveis?", options: ["Jogo no Google e vou no primeiro", "Tento achar fontes confiáveis...", "Procuro orientação de profissionais ou plataformas seguras"], weights: [1, 2, 3], explanation: "Sempre busque fontes seguras como a Clude Saúde." },
+                    { q: "No dia a dia, seu cuidado com a saúde é...", options: ["Geralmente deixo pra depois", "Tento cuidar, mas sem constância", "Parte da minha rotina diária"], weights: [1, 2, 3], explanation: "Pequenos hábitos diários mudam tudo." },
+                    { q: "O que mais atrapalha o cuidado com a saúde hoje?", options: ["Falta de tempo e correria", "Dificuldade para marcar consultas", "Consigo me organizar com recursos que facilitam"], weights: [1, 2, 3], explanation: "Nossos recursos digitais ajudam você a ganhar tempo." }
                 ],
                 results: (p) => {
-                    if (p <= 7) return "5 a 7 pontos – Cuidados em segundo plano: Hora de priorizar você! Na Clude Saúde, você encontra o apoio que precisa.";
-                    if (p <= 11) return "8 a 11 pontos – Já começou, mas pode melhorar! O desafio agora é a constância com acompanhamento confiável.";
-                    return "12 a 15 pontos – Você leva a saúde a sério! Parabéns! Continue mantendo essa rotina com o apoio do app Clude Saúde.";
+                    if (p <= 7) return "5 a 7 pontos – Sua saúde está em segundo plano. Na Clude Saúde, ajudamos você a retomar o controle!";
+                    if (p <= 11) return "8 a 11 pontos – Você já começou, mas pode melhorar a constância!";
+                    return "12 a 15 pontos – Parabéns! Você leva a saúde a sério e está no caminho certo.";
                 }
             },
             "Corpo": {
                 questions: [
-                    { q: "Comer de 3 em 3 horas é indispensável para o metabolismo?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! O metabolismo depende da qualidade e quantidade total diária." },
+                    { q: "Comer de 3 em 3 horas é indispensável para o metabolismo?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Depende da qualidade total da alimentação." },
                     { q: "É possível emagrecer comendo carboidrato à noite?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! O emagrecimento depende do balanço calórico total." },
-                    { q: "Tomar suplementos é essencial para o desempenho?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Uma alimentação equilibrada já pode suprir suas necessidades." },
-                    { q: "Leite e derivados são inflamatórios para qualquer pessoa?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Somente quem tem intolerâncias específicas precisa evitar." },
-                    { q: "Água com limão em jejum emagrece?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Hidratação é bom, mas o emagrecimento exige um conjunto de fatores." },
-                    { q: "A recomendação de vegetais é de 4 a 5 porções diárias?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! Recomenda-se cerca de 400g de vegetais por dia." },
-                    { q: "Ultraprocessados aumentam risco de doenças crônicas?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! Eles aumentam processos inflamatórios no corpo." }
+                    { q: "Tomar suplementos é essencial para o desempenho?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Alimentação equilibrada já pode suprir suas necessidades." },
+                    { q: "Leite e derivados são inflamatórios para qualquer pessoa?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Apenas pessoas com intolerância precisam evitar." },
+                    { q: "Água com limão em jejum emagrece?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Não há milagre, há hábitos saudáveis." },
+                    { q: "Recomendação de vegetais é de 4 a 5 porções por dia?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! Recomenda-se 400g diários." },
+                    { q: "Ultraprocessados aumentam risco de doenças?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! Evite-os para prevenir inflamações." }
                 ],
                 results: (p) => {
-                    if (p <= 3) return "0 a 3 pontos – Sinal de alerta: Hora de virar o jogo! Com a Clude Saúde, você tem nutricionistas e personal trainers.";
-                    if (p <= 5) return "4 a 5 pontos – Está no caminho certo, mas pode ir além! Use o chat para tirar dúvidas com especialistas.";
-                    return "6 a 7 pontos – Parabéns! Você entende de nutrição. Use o app para registrar seu peso e evolução.";
+                    if (p <= 3) return "0 a 3 pontos – Sinal de alerta! Hora de virar o jogo com a Clude Saúde.";
+                    if (p <= 5) return "4 a 5 pontos – Está no caminho certo, mas pode ir além!";
+                    return "6 a 7 pontos – Parabéns! Você manda bem na nutrição!";
                 }
             },
             "Mente": {
                 questions: [
-                    { q: "Com que frequência come apenas por ansiedade ou tédio?", options: ["Todos os dias", "Frequentemente", "Às vezes", "Raramente ou nunca"], weights: [0, 1, 2, 3], explanation: "Identificar a fome emocional é o primeiro passo para o controle." },
-                    { q: "Com que frequência consome frutas?", options: ["Raramente", "1 vez por semana", "2 a 4 vezes", "Todos os dias"], weights: [0, 1, 2, 3], explanation: "As frutas fornecem fibras essenciais para o cérebro e corpo." },
-                    { q: "Qual o seu volume de água diário?", options: ["Até 50
+                    { q: "Com que frequência come por ansiedade ou tédio?", options: ["Todo dia", "3 a 5 vezes/semana", "1 a 2 vezes/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Identificar a fome emocional é o primeiro passo." },
+                    { q: "Com que frequência consome frutas?", options: ["Raramente", "1 vez/semana", "2 a 4 vezes/semana", "Todo dia"], weights: [0, 1, 2, 3], explanation: "Frutas trazem vitalidade." },
+                    { q: "Quanto de água você bebe?", options: ["Até 500ml", "Até 1,25L", "Até 2L", "Mais de 2L"], weights: [0, 1, 2, 3], explanation: "Água melhora o foco e disposição." },
+                    { q: "Consome alimentos ultraprocessados?", options: ["Todo dia", "2 a 4 vezes/semana", "1 vez/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Menos processados = mais saúde." },
+                    { q: "Consome alimentos gordurosos (frituras, embutidos)?", options: ["Todo dia", "2 a 4 vezes/semana", "1 vez/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Proteja seu coração reduzindo gorduras." },
+                    { q: "Seguiu dietas restritivas por conta própria?", options: ["Frequente", "Algumas vezes", "Raramente", "Nunca"], weights: [0, 1, 2, 3], explanation: "Busque sempre orientação profissional." },
+                    { q: "Já registrou seu peso hoje?", options: ["Sim", "Não"], weights: [3, 0], explanation: "Acompanhar sua evolução ajuda na motivação!" }
+                ],
+                results: (p) => {
+                    if (p <= 7) return "0 a 7 pontos – Alerta vermelho! Atenção aos seus hábitos.";
+                    if (p <= 14) return "8 a 14 pontos – Zona de atenção. Há espaço para melhorias!";
+                    return "15 a 21 pontos – Parabéns! Seus hábitos refletem equilíbrio.";
+                }
+            }
+        };
+
+        function selectArea(btn, area) {
+            userData.area = area;
+            document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('selected-purple'));
+            btn.classList.add('selected-purple');
+        }
+
+        function startQuiz() {
+            userData.nome = document.getElementById('nome').value;
+            userData.telefone = document.getElementById('telefone').value;
+            if(!userData.nome || !userData.telefone || !userData.area) {
+                alert("Preencha Nome, WhatsApp e selecione um Tema!");
+                return;
+            }
+            document.getElementById('step-registration').classList.add('hidden');
+            document.getElementById('step-quiz').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const data = quizData[userData.area].questions[currentIdx];
+            const total = quizData[userData.area].questions.length;
+            
+            document.getElementById('question-number').innerText = `Pergunta ${currentIdx + 1} de ${total}`;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            data.options.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.type = "button";
+                b.className = "w-full text-left p-4 border-2 border-gray-100 rounded-2xl hover:border-purple-200 transition-all font-bold text-gray-700 bg-white shadow-sm";
+                b.innerText = opt;
+                b.onclick = () => handleAnswer(i, b);
+                container.appendChild(b);
+            });
+        }
+
+        function handleAnswer(idx, btn) {
+            const data = quizData[userData.area].questions[currentIdx];
+            const feedback = document.getElementById('feedback');
+            const btns = document.getElementById('options-container').querySelectorAll('button');
+            btns.forEach(b => b.onclick = null);
+
+            if(data.weights) {
+                userData.pontuacao += data.weights[idx];
+                btn.classList.add('selected-purple');
+            } else {
+                if(idx === data.correct) {
+                    userData.pontuacao += 1;
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    btns[data.correct].classList.add('correct');
+                }
+            }
+            feedback.innerText = data.explanation;
+            feedback.classList.remove('hidden');
+            document.getElementById('current-score').innerText = `PONTOS: ${userData.pontuacao}`;
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < quizData[userData.area].questions.length) {
+                renderQuestion();
+            } else {
+                finish();
+            }
+        }
+
+        function finish() {
+            const quizContainer = document.getElementById('step-quiz');
+            quizContainer.innerHTML = "<div class='py-20 text-center font-black text-clude animate-pulse'>Enviando participação...</div>";
+            
+            const payload = {
+                nome: userData.nome,
+                telefone: userData.telefone,
+                area: userData.area,
+                pontuacao: userData.pontuacao,
+                auth_token: AUTH_TOKEN,
+                email_confirm: document.getElementById('email_confirm').value
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors', // Modo mais estável para evitar erros de bloqueio
+                body: JSON.stringify(payload)
+            }).then(() => {
+                showFinal();
+            }).catch(() => {
+                showFinal();
+            });
+        }
+
+        function showFinal() {
+            document.getElementById('step-quiz').classList.add('hidden');
+            document.getElementById('step-finish').classList.remove('hidden');
+            document.getElementById('result-message').innerText = quizData[userData.area].results(userData.pontuacao);
+        }
+    </script>
+</body>
+</html>
