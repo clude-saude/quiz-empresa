@@ -7,11 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden { display: none; }
-        /* Estilos para estados selecionados e cores oficiais */
-        .selected-purple { border-color: #8031a7 !important; background-color: #f3ebf6 !important; color: #8031a7 !important; }
+        /* Cor oficial Clude #8031a7 */
         .bg-clude { background-color: #8031a7; }
         .text-clude { color: #8031a7; }
         .border-clude { border-color: #8031a7; }
+        
+        /* Estilo do botão quando selecionado */
+        .selected-purple { 
+            border-color: #8031a7 !important; 
+            background-color: #f3ebf6 !important; 
+            color: #8031a7 !important;
+            box-shadow: 0 0 0 2px #8031a7;
+        }
+        
         .correct { background-color: #d1fae5; border-color: #10b981; }
         .wrong { background-color: #fee2e2; border-color: #ef4444; }
     </style>
@@ -39,9 +47,9 @@
                 
                 <p class="font-bold text-gray-700 mt-4 text-xs uppercase tracking-wider">Escolha o tema do quiz:</p>
                 <div class="grid grid-cols-3 gap-2">
-                    <button onclick="selectArea('Saúde')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Saúde</button>
-                    <button onclick="selectArea('Corpo')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Corpo</button>
-                    <button onclick="selectArea('Mente')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Mente</button>
+                    <button type="button" onclick="selectArea(this, 'Saúde')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Saúde</button>
+                    <button type="button" onclick="selectArea(this, 'Corpo')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Corpo</button>
+                    <button type="button" onclick="selectArea(this, 'Mente')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-sm font-bold text-gray-500 hover:bg-purple-50 transition">Mente</button>
                 </div>
                 <button onclick="startQuiz()" class="w-full bg-clude text-white py-4 rounded-2xl font-bold mt-6 shadow-lg hover:opacity-90 transform active:scale-95 transition">INICIAR AGORA</button>
             </div>
@@ -55,32 +63,27 @@
                 </div>
                 <h2 id="question-text" class="text-lg font-bold text-gray-800 mb-6 leading-tight">...</h2>
                 <div id="options-container" class="space-y-3"></div>
-                
                 <div id="feedback" class="mt-6 p-4 rounded-xl hidden text-sm leading-relaxed"></div>
-                
                 <button id="next-btn" onclick="nextQuestion()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-bold mt-6 hidden shadow-lg transition">PRÓXIMA PERGUNTA</button>
             </div>
         </div>
 
-        <div id="step-finish" class="hidden">
-            <div class="text-center">
-                <div class="inline-block p-4 bg-purple-50 rounded-full mb-4">
-                    <svg class="w-12 h-12 text-clude" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Seu Resultado</h2>
-                <div id="result-message" class="text-gray-600 bg-gray-50 p-6 rounded-2xl text-left text-sm leading-relaxed mb-6 italic border-l-4 border-clude"></div>
-                <p class="text-clude font-bold mb-6">✅ Dados registrados! Você já está no sorteio.</p>
-                <button onclick="location.reload()" class="text-xs text-gray-400 font-bold uppercase tracking-widest hover:text-clude transition">Refazer Quiz</button>
+        <div id="step-finish" class="hidden text-center">
+            <div class="inline-block p-4 bg-purple-50 rounded-full mb-4">
+                <svg class="w-12 h-12 text-clude" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Seu Resultado</h2>
+            <div id="result-message" class="text-gray-600 bg-gray-50 p-6 rounded-2xl text-left text-sm leading-relaxed mb-6 italic border-l-4 border-clude"></div>
+            <p class="text-clude font-bold mb-6">✅ Dados registrados! Você já está no sorteio.</p>
+            <button onclick="location.reload()" class="text-xs text-gray-400 font-bold uppercase tracking-widest hover:text-clude transition">Refazer Quiz</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES GERAIS
         let userData = { nome: '', telefone: '', area: '', pontuacao: 0 };
         let currentIdx = 0;
         
-        // --- COLOQUE SUA URL DO GOOGLE APPS SCRIPT ABAIXO ---
+        // --- LEMBRE-SE DE COLOCAR SUA URL ABAIXO ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxBYFWkHqPJOMB5gGZXu-giU_OysV07TuIHng5OpfDRlfrZNECGrb-YoIP6BAwZWTchiA/exec'; 
 
         const quizData = {
@@ -93,55 +96,142 @@
                     { q: "O que mais atrapalha o cuidado com a saúde hoje?", options: ["Falta de tempo e correria", "Dificuldade para marcar ou lembrar consultas", "Consigo me organizar e uso recursos facilitadores"], weights: [1, 2, 3], explanation: "A Clude Saúde ajuda você a organizar sua rotina de cuidados!" }
                 ],
                 results: (p) => {
-                    if (p <= 7) return "5 a 7 pontos – Cuidados em segundo plano: Hora de priorizar você! Sua saúde parece estar ficando para depois. Na Clude Saúde, você encontra o apoio que precisa para retomar o controle.";
-                    if (p <= 11) return "8 a 11 pontos – Já começou, mas pode melhorar! Você conhece a importância da prevenção. O desafio é a constância, e a Clude Saúde é sua aliada.";
-                    return "12 a 15 pontos – Você leva a saúde a sério! Parabéns! Seu olhar atento para o bem-estar é exemplar. Continue com o apoio do app Clude Saúde.";
+                    if (p <= 7) return "5 a 7 pontos – Cuidados em segundo plano: Hora de priorizar você! Na Clude Saúde, você encontra o apoio que precisa para retomar o controle.";
+                    if (p <= 11) return "8 a 11 pontos – Já começou, mas pode melhorar! O desafio agora é transformar isso em constância.";
+                    return "12 a 15 pontos – Você leva a saúde a sério! Parabéns! Continue com o apoio do app Clude Saúde.";
                 }
             },
             "Corpo": {
                 questions: [
                     { q: "Comer de 3 em 3 horas é indispensável para acelerar o metabolismo?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! O metabolismo depende da qualidade e da quantidade total da alimentação." },
                     { q: "É possível emagrecer comendo carboidrato à noite?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! O emagrecimento depende do balanço calórico total do dia." },
-                    { q: "Tomar suplementos é essencial para melhorar o desempenho físico?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Uma alimentação equilibrada já pode atender todas as necessidades do corpo." },
-                    { q: "Leite e derivados são inflamatórios para qualquer pessoa?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Apenas pessoas com intolerâncias ou alergias específicas precisam evitar." },
-                    { q: "Água com limão em jejum é responsável pelo emagrecimento?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! A hidratação é ótima, mas o emagrecimento depende de um conjunto de fatores saudáveis." },
+                    { q: "Tomar suplementos é essencial para melhorar o desempenho físico?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Uma alimentação equilibrada já atende as necessidades do corpo." },
+                    { q: "Leite e derivados são inflamatórios para qualquer pessoa?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Apenas pessoas com intolerâncias específicas precisam evitar." },
+                    { q: "Água com limão em jejum é responsável pelo emagrecimento?", options: ["Verdadeiro", "Falso"], correct: 1, explanation: "Falso! Hidratação é ótima, mas não emagrece sozinha." },
                     { q: "A recomendação diária de vegetais é de pelo menos 4 a 5 porções?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! Recomenda-se o consumo de 400g diárias de frutas e legumes." },
-                    { q: "Alimentos ultraprocessados podem aumentar o risco de doenças crônicas?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! O consumo frequente aumenta processos inflamatórios no organismo." }
+                    { q: "Alimentos ultraprocessados podem aumentar o risco de doenças crônicas?", options: ["Verdadeiro", "Falso"], correct: 0, explanation: "Verdadeiro! O consumo frequente aumenta processos inflamatórios." }
                 ],
                 results: (p) => {
-                    if (p <= 3) return "0 a 3 pontos – Sinal de alerta: Hora de virar o jogo! Com a Clude Saúde, você tem suporte de nutricionistas e personal trainers para um plano personalizado.";
-                    if (p <= 5) return "4 a 5 pontos – Está no caminho certo! Já usou o chat para tirar dúvidas ou as videoaulas para variar seus treinos?";
-                    return "6 a 7 pontos – Parabéns: Você manda bem na nutrição! Use o app Clude Saúde para registrar seu peso e acompanhar sua evolução.";
+                    if (p <= 3) return "0 a 3 pontos – Sinal de alerta: Hora de virar o jogo! Com a Clude Saúde, você tem suporte profissional.";
+                    if (p <= 5) return "4 a 5 pontos – Está no caminho certo! Já usou o chat da Clude Saúde para tirar dúvidas?";
+                    return "6 a 7 pontos – Parabéns! Use o app Clude Saúde para registrar seu peso e acompanhar sua evolução.";
                 }
             },
             "Mente": {
                 questions: [
-                    { q: "Com que frequência você come por ansiedade ou tédio?", options: ["Todos os dias", "Frequentemente", "Às vezes", "Raramente ou nunca"], weights: [0, 1, 2, 3], explanation: "Identificar a fome emocional é essencial para o bem-estar." },
-                    { q: "Com que frequência você consome frutas?", options: ["Raramente", "1 vez por semana", "2 a 4 vezes", "Todos os dias"], weights: [0, 1, 2, 3], explanation: "Frutas trazem vitalidade para o seu dia a dia." },
-                    { q: "Qual o seu volume de consumo de água diário?", options: ["Até 500ml", "Até 1,25L", "Até 2L", "Mais de 2L"], weights: [0, 1, 2, 3], explanation: "A água é o combustível principal do seu corpo." },
-                    { q: "Frequência de consumo de alimentos ultraprocessados:", options: ["Todos os dias", "2 a 4 vezes/semana", "1 vez/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Menos processados significa mais saúde a longo prazo." },
+                    { q: "Com que frequência você come por ansiedade ou tédio?", options: ["Todos os dias", "Frequentemente", "Às vezes", "Raramente ou nunca"], weights: [0, 1, 2, 3], explanation: "Identificar a fome emocional é essencial." },
+                    { q: "Com que frequência você consome frutas?", options: ["Raramente", "1 vez por semana", "2 a 4 vezes", "Todos os dias"], weights: [0, 1, 2, 3], explanation: "Frutas trazem vitalidade para o seu dia." },
+                    { q: "Qual o seu volume de consumo de água diário?", options: ["Até 500ml", "Até 1,25L", "Até 2L", "Mais de 2L"], weights: [0, 1, 2, 3], explanation: "A água é o combustível principal do corpo." },
+                    { q: "Frequência de consumo de alimentos ultraprocessados:", options: ["Todos os dias", "2 a 4 vezes/semana", "1 vez/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Menos processados significa mais saúde." },
                     { q: "Frequência de consumo de alimentos gordurosos (frituras, embutidos):", options: ["Todos os dias", "2 a 4 vezes/semana", "1 vez/semana", "Raramente/nunca"], weights: [0, 1, 2, 3], explanation: "Reduzir gorduras saturadas protege seu coração." }
                 ],
                 results: (p) => {
-                    if (p <= 7) return "0 a 7 pontos – Alerta vermelho: Atenção aos seus hábitos. Na Clude Saúde, você encontra nutricionistas que ajudam você com planos personalizados.";
-                    if (p <= 14) return "8 a 14 pontos – Zona de atenção: Há espaço para melhorias! Pequenas mudanças na hidratação e variedade alimentar farão diferença.";
-                    return "15 a 21 pontos – Parabéns! Seus hábitos refletem equilíbrio e cuidado. Use a Clude Saúde para potencializar ainda mais sua vitalidade.";
+                    if (p <= 7) return "0 a 7 pontos – Alerta vermelho: Na Clude Saúde, você encontra nutricionistas que ajudam com planos personalizados.";
+                    if (p <= 14) return "8 a 14 pontos – Zona de atenção: Há espaço para melhorias! Pequenas mudanças farão diferença.";
+                    return "15 a 21 pontos – Parabéns! Seus hábitos refletem equilíbrio e cuidado.";
                 }
             }
         };
 
-        function selectArea(area) {
+        function selectArea(btn, area) {
             userData.area = area;
-            document.querySelectorAll('.area-btn').forEach(btn => {
-                if(btn.innerText === area) {
-                    btn.classList.add('selected-purple');
-                } else {
-                    btn.classList.remove('selected-purple');
-                }
+            // Remove a seleção de todos os botões
+            document.querySelectorAll('.area-btn').forEach(b => {
+                b.classList.remove('selected-purple');
             });
+            // Adiciona a seleção apenas no botão clicado
+            btn.classList.add('selected-purple');
         }
 
         function startQuiz() {
             userData.nome = document.getElementById('nome').value;
             userData.telefone = document.getElementById('telefone').value;
-            if(!userData.nome || !userData.telefone || !userData.area) return alert("Por favor,
+            if(!userData.nome || !userData.telefone || !userData.area) {
+                return alert("Por favor, preencha nome, telefone e selecione um dos 3 temas!");
+            }
+            
+            document.getElementById('step-registration').classList.add('hidden');
+            document.getElementById('step-quiz').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const data = quizData[userData.area].questions[currentIdx];
+            const total = quizData[userData.area].questions.length;
+            
+            document.getElementById('question-number').innerText = `Pergunta ${currentIdx + 1} de ${total}`;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            data.options.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = "w-full text-left p-4 border-2 border-gray-100 rounded-2xl hover:border-purple-200 transition font-medium text-gray-700 bg-white shadow-sm";
+                b.innerText = opt;
+                b.onclick = () => handleAnswer(i, b);
+                container.appendChild(b);
+            });
+        }
+
+        function handleAnswer(idx, btn) {
+            const data = quizData[userData.area].questions[currentIdx];
+            const feedback = document.getElementById('feedback');
+            const btns = document.getElementById('options-container').querySelectorAll('button');
+            
+            btns.forEach(b => b.onclick = null);
+
+            if(data.weights) {
+                userData.pontuacao += data.weights[idx];
+                btn.classList.add('selected-purple');
+            } else {
+                if(idx === data.correct) {
+                    userData.pontuacao += 1;
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    btns[data.correct].classList.add('correct');
+                }
+            }
+
+            feedback.innerText = data.explanation;
+            feedback.classList.remove('hidden');
+            feedback.classList.add('bg-purple-50', 'text-clude', 'border-l-4', 'border-clude');
+            
+            document.getElementById('current-score').innerText = `PONTOS: ${userData.pontuacao}`;
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < quizData[userData.area].questions.length) {
+                renderQuestion();
+            } else {
+                finish();
+            }
+        }
+
+        function finish() {
+            const quizContainer = document.getElementById('step-quiz');
+            quizContainer.innerHTML = "<div class='py-10 text-center font-bold text-clude animate-pulse'>Enviando sua participação...</div>";
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(userData)
+            }).then(() => {
+                quizContainer.classList.add('hidden');
+                document.getElementById('step-finish').classList.remove('hidden');
+                document.getElementById('result-message').innerText = quizData[userData.area].results(userData.pontuacao);
+            }).catch(err => {
+                // Mesmo se der erro de CORS, os dados costumam chegar no Google
+                quizContainer.classList.add('hidden');
+                document.getElementById('step-finish').classList.remove('hidden');
+                document.getElementById('result-message').innerText = quizData[userData.area].results(userData.pontuacao);
+            });
+        }
+    </script>
+</body>
+</html>
