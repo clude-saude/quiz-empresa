@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clude Saúde | Quiz</title>
+    <title>Clude Saúde | Quiz Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden { display: none; }
@@ -23,19 +23,19 @@
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
 
     <div id="main-card" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-lg border-t-[10px] border-clude">
-        <div class="text-center mb-8">
+        <div class="text-center mb-6">
             <h1 class="text-3xl font-black text-clude tracking-tighter">Clude Saúde</h1>
         </div>
 
         <div id="step-registration">
-            <h2 class="text-xl font-bold text-gray-800 mb-2 text-center">Participe do Sorteio!</h2>
-            <p class="text-gray-500 text-center text-sm">Preencha seus dados para começar.</p>
+            <h2 class="text-xl font-bold text-gray-800 mb-1 text-center">Participe do Sorteio!</h2>
+            <p class="text-gray-500 text-center text-xs">Responda o quiz e descubra seu perfil.</p>
             
             <p class="text-[10px] text-gray-400 mt-4 leading-relaxed text-center italic">
                 Ao clicar em Iniciar Quiz, você concorda com o compartilhamento dos seus dados, que serão utilizados exclusivamente para a viabilização e realização do sorteio.
             </p>
             
-            <div class="space-y-4 mt-8">
+            <div class="space-y-4 mt-6">
                 <div>
                     <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Nome Completo</label>
                     <input type="text" id="nome" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-clude transition-all">
@@ -47,14 +47,14 @@
 
                 <input type="text" id="email_confirm" style="display:none !important" tabindex="-1">
                 
-                <p class="font-bold text-gray-700 mt-6 text-center text-xs uppercase">Escolha um tema:</p>
+                <p class="font-bold text-gray-700 mt-4 text-center text-[10px] uppercase tracking-widest">Escolha um tema para o Quiz:</p>
                 <div class="grid grid-cols-3 gap-2">
-                    <button type="button" onclick="setTema(this, 'Saúde')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Saúde</button>
-                    <button type="button" onclick="setTema(this, 'Corpo')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Corpo</button>
-                    <button type="button" onclick="setTema(this, 'Mente')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all uppercase">Mente</button>
+                    <button type="button" onclick="marcarTema(this, 'Saúde')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">SAÚDE</button>
+                    <button type="button" onclick="marcarTema(this, 'Corpo')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">CORPO</button>
+                    <button type="button" onclick="marcarTema(this, 'Mente')" class="area-btn border-2 border-gray-100 p-3 rounded-xl text-[10px] font-black text-gray-400 hover:bg-purple-50 transition-all">MENTE</button>
                 </div>
 
-                <button type="button" onclick="validaESobe()" class="w-full bg-clude text-white py-5 rounded-2xl font-black mt-8 shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest">Iniciar Quiz</button>
+                <button type="button" onclick="validarFormulario()" class="w-full bg-clude text-white py-5 rounded-2xl font-black mt-6 shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest">Iniciar Quiz</button>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
                 <h2 id="question-text" class="text-lg font-bold text-gray-800 mb-8 leading-tight"></h2>
                 <div id="options-container" class="space-y-3"></div>
                 <div id="feedback" class="mt-8 p-5 rounded-2xl hidden text-sm font-medium leading-relaxed border-l-8 border-clude bg-purple-50 text-clude"></div>
-                <button id="next-btn" type="button" onclick="proxima()" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-black mt-8 hidden shadow-lg uppercase tracking-widest transition-all">Continuar</button>
+                <button id="next-btn" type="button" onclick="irProxima()" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-black mt-8 hidden shadow-lg uppercase tracking-widest">Continuar</button>
             </div>
         </div>
 
@@ -75,22 +75,22 @@
             <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 text-clude">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
-            <h2 class="text-2xl font-black text-gray-800 mb-4">Concluído!</h2>
+            <h2 class="text-2xl font-black text-gray-800 mb-4">Quiz Concluído!</h2>
             <div id="result-message" class="text-gray-600 bg-gray-50 p-6 rounded-3xl text-left text-sm leading-relaxed mb-8 italic border-l-4 border-clude shadow-inner"></div>
-            <p class="text-clude font-black mb-8 uppercase text-sm">✅ Participação confirmada!</p>
-            <button type="button" onclick="location.reload()" class="text-[10px] font-black text-gray-400 uppercase hover:text-clude transition-all">Refazer</button>
+            <p class="text-clude font-black mb-8 uppercase text-sm tracking-widest">✅ Participação confirmada!</p>
+            <button type="button" onclick="location.reload()" class="text-[10px] font-black text-gray-400 uppercase hover:text-clude transition-all">Refazer Quiz</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES - PREENCHA ABAIXO
+        // --- COLOQUE SEUS DADOS AQUI ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyy6aD0FNA4VlT-ETUAz0-ctnUScJI9zIhrqbihqNcOvM5UGSrran8YdWxoYlTkm4YNgg/exec'; 
         const AUTH_TOKEN = 'Clude2026!Quiz#Alpha'; 
 
         let user = { nome: '', telefone: '', area: '', pontos: 0 };
-        let indexAtual = 0;
+        let iAtual = 0;
 
-        const bancoQuiz = {
+        const banco = {
             "Saúde": [
                 { q: "Quando falamos em saúde, você pensa em...", options: ["Só me preocupo quando algum sintoma aparece", "Tento manter o equilíbrio, mas preciso melhorar", "Encaro com prioridade para prevenir doenças"], w: [1, 2, 3], f: "A prevenção é o melhor caminho!" },
                 { q: "Como você cuida da sua saúde mental?", options: ["Não cuido muito", "Tento controlar o estresse com pausas", "Dou atenção emocional e busco ajuda profissional"], w: [1, 2, 3], f: "Mente sã, corpo são!" },
@@ -103,4 +103,124 @@
                 { q: "É possível emagrecer comendo carboidrato à noite?", options: ["Verdadeiro", "Falso"], c: 0, f: "Verdadeiro! O que conta é o balanço total." },
                 { q: "Suplementos são essenciais para o desempenho?", options: ["Verdadeiro", "Falso"], c: 1, f: "Falso! Comida de verdade já supre muito." },
                 { q: "Leite e derivados são inflamatórios para todos?", options: ["Verdadeiro", "Falso"], c: 1, f: "Falso! Apenas para quem tem intolerância." },
-                { q: "Água com limão em jejum emagrece?", options: ["Verdadeiro", "Falso"], c:
+                { q: "Água com limão em jejum emagrece?", options: ["Verdadeiro", "Falso"], c: 1, f: "Falso! Não há milagre." },
+                { q: "A recomendação de vegetais é de 4 a 5 porções por dia?", options: ["Verdadeiro", "Falso"], c: 0, f: "Verdadeiro! Recomenda-se 400g diários." },
+                { q: "Ultraprocessados aumentam risco de doenças?", options: ["Verdadeiro", "Falso"], c: 0, f: "Verdadeiro! Evite-os para prevenir inflamações." }
+            ],
+            "Mente": [
+                { q: "Com que frequência come por ansiedade?", options: ["Todo dia", "3-5x semana", "1-2x semana", "Raramente"], w: [0, 1, 2, 3], f: "Fome emocional é um sinal importante." },
+                { q: "Quanto de água você bebe?", options: ["Até 500ml", "Até 1,25L", "Até 2L", "Mais de 2L"], w: [0, 1, 2, 3], f: "Água melhora o foco mental." },
+                { q: "Consome alimentos ultraprocessados?", options: ["Todo dia", "Frequentemente", "Às vezes", "Raramente"], w: [0, 1, 2, 3], f: "Menos processados = mais clareza mental." },
+                { q: "Seguiu dietas restritivas sozinho(a)?", options: ["Sempre", "Algumas vezes", "Raramente", "Nunca"], w: [0, 1, 2, 3], f: "Busque sempre orientação profissional." },
+                { q: "Já registrou seu peso hoje no app?", options: ["Sim", "Não"], w: [3, 0], f: "Acompanhar dados motiva a constância!" }
+            ]
+        };
+
+        function marcarTema(botao, tema) {
+            user.area = tema;
+            document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('selected-purple'));
+            botao.classList.add('selected-purple');
+            console.log("Tema selecionado: " + user.area);
+        }
+
+        function validarFormulario() {
+            user.nome = document.getElementById('nome').value;
+            user.telefone = document.getElementById('telefone').value;
+            
+            if(!user.nome || !user.telefone || !user.area) {
+                alert("Por favor: preencha seu Nome, WhatsApp e selecione um Tema (botões abaixo).");
+                return;
+            }
+            document.getElementById('step-registration').classList.add('hidden');
+            document.getElementById('step-quiz').classList.remove('hidden');
+            montarPergunta();
+        }
+
+        function montarPergunta() {
+            const quizAtivo = banco[user.area];
+            const pergunta = quizAtivo[iAtual];
+            
+            document.getElementById('question-number').innerText = `Questão ${iAtual + 1} de ${quizAtivo.length}`;
+            document.getElementById('question-text').innerText = pergunta.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const areaOpcoes = document.getElementById('options-container');
+            areaOpcoes.innerHTML = '';
+            
+            pergunta.options.forEach((txt, index) => {
+                const btnOp = document.createElement('button');
+                btnOp.type = "button";
+                btnOp.className = "w-full text-left p-4 border-2 border-gray-100 rounded-2xl font-bold text-gray-700 bg-white hover:bg-slate-50";
+                btnOp.innerText = txt;
+                btnOp.onclick = () => {
+                    const todos = areaOpcoes.querySelectorAll('button');
+                    todos.forEach(b => b.onclick = null);
+                    
+                    if(pergunta.w) {
+                        user.pontos += pergunta.w[index];
+                        btnOp.classList.add('selected-purple');
+                    } else {
+                        if(index === pergunta.c) {
+                            user.pontos += 1;
+                            btnOp.classList.add('correct');
+                        } else {
+                            btnOp.classList.add('wrong');
+                            todos[pergunta.c].classList.add('correct');
+                        }
+                    }
+                    document.getElementById('feedback').innerText = pergunta.f;
+                    document.getElementById('feedback').classList.remove('hidden');
+                    document.getElementById('current-score').innerText = `PONTOS: ${user.pontos}`;
+                    document.getElementById('next-btn').classList.remove('hidden');
+                };
+                areaOpcoes.appendChild(btnOp);
+            });
+        }
+
+        function irProxima() {
+            iAtual++;
+            if(iAtual < banco[user.area].length) {
+                montarPergunta();
+            } else {
+                enviarDados();
+            }
+        }
+
+        function enviarDados() {
+            document.getElementById('step-quiz').innerHTML = "<div class='py-20 text-center font-black text-clude animate-pulse uppercase tracking-widest'>Salvando sua participação...</div>";
+            
+            const payload = {
+                nome: user.nome,
+                telefone: user.telefone,
+                area: user.area,
+                pontuacao: user.pontos,
+                auth_token: AUTH_TOKEN,
+                email_confirm: document.getElementById('email_confirm').value
+            };
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                body: JSON.stringify(payload) 
+            }).then(() => telaFinal()).catch(() => telaFinal());
+        }
+
+        function telaFinal() {
+            document.getElementById('step-quiz').classList.add('hidden');
+            document.getElementById('step-finish').classList.remove('hidden');
+            
+            let finalMsg = "";
+            const p = user.pontos;
+            if(user.area === "Saúde") {
+                finalMsg = p <= 7 ? "Cuidados em segundo plano: Hora de priorizar você! Na Clude Saúde, ajudamos você a retomar o controle." : p <= 11 ? "Já começou, mas pode melhorar a constância!" : "Você leva a saúde a sério! Parabéns!";
+            } else if(user.area === "Corpo") {
+                finalMsg = p <= 3 ? "Sinal de alerta! Hora de virar o jogo com a Clude Saúde." : p <= 5 ? "Está no caminho certo!" : "Parabéns! Você entende de nutrição!";
+            } else {
+                finalMsg = p <= 7 ? "Alerta vermelho! Atenção aos seus hábitos." : p <= 14 ? "Zona de atenção. Há espaço para melhorias!" : "Parabéns! Seus hábitos refletem equilíbrio.";
+            }
+            document.getElementById('result-message').innerText = finalMsg;
+        }
+    </script>
+</body>
+</html>
