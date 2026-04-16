@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Premiado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none; }
+        .correct { background-color: #d1fae5; border-color: #10b981; }
+        .wrong { background-color: #fee2e2; border-color: #ef4444; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+
+    <div id="quiz-container" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <div id="step-registration">
+            <h1 class="text-2xl font-bold text-center text-indigo-600 mb-6">Participe e Ganhe!</h1>
+            <p class="text-gray-600 mb-6 text-center">Preencha seus dados para começar o quiz e participar do sorteio.</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="nome" placeholder="Seu Nome Completo" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="tel" id="telefone" placeholder="Seu Telefone (WhatsApp)" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                
+                <p class="font-semibold text-gray-700 mt-4 text-sm">Escolha sua área de interesse:</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="selectArea('Saúde')" class="area-btn border p-2 rounded-lg text-sm hover:bg-indigo-50">Saúde</button>
+                    <button onclick="selectArea('Corpo')" class="area-btn border p-2 rounded-lg text-sm hover:bg-indigo-50">Corpo</button>
+                    <button onclick="selectArea('Mente')" class="area-btn border p-2 rounded-lg text-sm hover:bg-indigo-50">Mente</button>
+                </div>
+                <button onclick="startQuiz()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold mt-6 hover:bg-indigo-700 transition">COMEÇAR QUIZ</button>
+            </div>
+        </div>
+
+        <div id="step-quiz" class="hidden">
+            <div id="question-box">
+                <span id="question-number" class="text-xs font-bold text-indigo-500 uppercase tracking-widest">Pergunta 1 de 5</span>
+                <h2 id="question-text" class="text-xl font-semibold mt-2 mb-6 text-gray-800">Pergunta aqui?</h2>
+                <div id="options-container" class="space-y-3">
+                    </div>
+                <div id="feedback" class="mt-6 p-4 rounded-lg hidden text-sm font-medium"></div>
+                <button id="next-btn" onclick="nextQuestion()" class="w-full bg-gray-800 text-white py-3 rounded-xl font-bold mt-6 hidden">PRÓXIMA</button>
+            </div>
+        </div>
+
+        <div id="step-finish" class="hidden text-center">
+            <div class="text-5xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Quiz Concluído!</h2>
+            <p class="text-gray-600">Obrigado por participar. Seus dados foram registrados e você já está no sorteio!</p>
+            <p class="text-sm text-indigo-600 mt-4 font-bold">Boa sorte!</p>
+        </div>
+    </div>
+
+    <script>
+        let userData = { nome: '', telefone: '', area: '' };
+        let currentQuestion = 0;
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxBYFWkHqPJOMB5gGZXu-giU_OysV07TuIHng5OpfDRlfrZNECGrb-YoIP6BAwZWTchiA/exec'; // <--- SUBSTITUA AQUI
+
+        const questions = {
+            "Saúde": [
+                { q: "Qual a recomendação diária de água para um adulto?", options: ["1 litro", "2 a 3 litros", "5 litros"], correct: 1, feedback: "O ideal é entre 2 e 3 litros para manter o metabolismo saudável!" },
+                // Adicione mais 4 perguntas aqui...
+            ],
+            "Corpo": [
+                { q: "O que é mais importante para ganhar massa?", options: ["Só cardio", "Treino de força e proteína", "Dormir pouco"], correct: 1, feedback: "Exato! Músculos precisam de estímulo e nutrição." },
+                // Adicione mais 4 perguntas aqui...
+            ],
+            "Mente": [
+                { q: "Qual hábito ajuda a reduzir o cortisol (estresse)?", options: ["Trabalhar 15h", "Meditação e sono", "Beber muito café"], correct: 1, feedback: "Meditar ajuda a acalmar o sistema nervoso." },
+                // Adicione mais 4 perguntas aqui...
+            ]
+        };
+
+        function selectArea(area) {
+            userData.area = area;
+            document.querySelectorAll('.area-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                if(btn.innerText === area) btn.classList.add('bg-indigo-600', 'text-white');
+            });
+        }
+
+        function startQuiz() {
+            userData.nome = document.getElementById('nome').value;
+            userData.telefone = document.getElementById('telefone').value;
+            
+            if(!userData.nome || !userData.telefone || !userData.area) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+            document.getElementById('step-registration').classList.add('hidden');
+            document.getElementById('step-quiz').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const qData = questions[userData.area][currentQuestion];
+            document.getElementById('question-number').innerText = `Pergunta ${currentQuestion + 1} de 1`; // Ajuste para 5 depois
+            document.getElementById('question-text').innerText = qData.q;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
+                btn.className = "w-full text-left p-4 border rounded-xl hover:bg-gray-50 transition";
+                btn.onclick = () => checkAnswer(index, qData.correct, qData.feedback);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct, feedbackText) {
+            const btns = document.getElementById('options-container').children;
+            const feedbackDiv = document.getElementById('feedback');
+            
+            if(selected === correct) {
+                btns[selected].classList.add('correct');
+                feedbackDiv.innerText = "✅ Correto! " + feedbackText;
+                feedbackDiv.className = "mt-6 p-4 rounded-lg text-sm font-medium correct";
+            } else {
+                btns[selected].classList.add('wrong');
+                feedbackDiv.innerText = "❌ Ops! " + feedbackText;
+                feedbackDiv.className = "mt-6 p-4 rounded-lg text-sm font-medium wrong";
+            }
+            
+            feedbackDiv.classList.remove('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if(currentQuestion < questions[userData.area].length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('step-quiz').innerHTML = "Enviando seus dados...";
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                body: JSON.stringify(userData)
+            }).then(() => {
+                document.getElementById('step-quiz').classList.add('hidden');
+                document.getElementById('step-finish').classList.remove('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
